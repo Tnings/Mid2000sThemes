@@ -1,0 +1,444 @@
+/* Vars */
+:root{
+    --element-bg: #eceadd;
+    --element-border: #cdcabf;
+}
+
+/* Toolbar */
+/* Revert Tabs */
+.titlebar-color {
+  color: -moz-accent-color-foreground;
+  background-color: -moz-accent-color;
+}
+
+.tab-background {
+  border-radius: 4px 4px 0 0 !important;
+  margin-bottom: 0px !important;
+}
+
+.tabbrowser-tab:not([selected="true"]):not([multiselected="true"]) .tab-background {
+  background-color: color-mix(in srgb, currentColor 5%, transparent);
+}
+
+menupopup > menu, menupopup > menuitem {
+  padding-block: 2px !important;
+}
+
+:root {
+  --arrowpanel-menuitem-padding: 2px !important;
+}
+
+.tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-background {
+  border: 1px solid rgba(130, 130, 130, 0.5) !important;
+}
+
+.tabbrowser-tab[selected="true"] .tab-background {
+  border-left: 1px solid rgba(130, 130, 130, 0.5) !important;
+  border-right: 1px solid rgba(130, 130, 130, 0.5) !important;
+}
+
+.toolbar-items, .tabbrowser-tab {
+  max-height: 38px;
+}
+
+:root[uidensity=touch] .toolbar-items, .tabbrowser-tab {
+  max-height: 45px;
+}
+
+.tabbrowser-tab[usercontextid] .tab-background {
+  background: var(--identity-tab-color) !important;
+  border-left: 1px solid rgba(130, 130, 130, 0.5) !important;
+  border-right: 1px solid rgba(130, 130, 130, 0.5) !important;
+  border-bottom: var(--identity-tab-color) !important;
+  opacity: 0.8 !important;
+}
+
+
+/* Tabbar Below Address Bar */
+
+/* Source file https://github.com/MrOtherGuy/firefox-csshacks/tree/master/chrome/window_control_placeholder_support.css made available under Mozilla Public License v. 2.0
+See the above repository for updates as well as full license text. */
+
+/* Creates placeholders for window controls */
+/* This is a supporting file used by other stylesheets */
+
+/* This stylesheet is pretty much unnecessary if window titlebar is enabled */
+
+/* This file should preferably be imported before other stylesheets */
+
+/* Defaults for window controls on RIGHT side of the window */
+/* Modify these values to match your preferences */
+:root:is([tabsintitlebar], [sizemode="fullscreen"]) {
+  --uc-window-control-width: 138px; /* Space reserved for window controls (Win10) */
+  /* Extra space reserved on both sides of the nav-bar to be able to drag the window */
+  --uc-window-drag-space-pre: 30px; /* left side*/
+  --uc-window-drag-space-post: 30px; /* right side*/
+}
+
+:root:is([tabsintitlebar][sizemode="maximized"], [sizemode="fullscreen"]) {
+  --uc-window-drag-space-pre: 0px; /* Remove pre space */
+}
+
+@media  (-moz-platform: windows-win7),
+        (-moz-platform: windows-win8),
+        (-moz-os-version: windows-win7),
+        (-moz-os-version: windows-win8){
+  :root:is([tabsintitlebar], [sizemode="fullscreen"]) {
+    --uc-window-control-width: 105px;
+  }
+}
+
+@media (-moz-gtk-csd-available) {
+  :root:is([tabsintitlebar],[sizemode="fullscreen"]) {
+    --uc-window-control-width: 84px;
+  }
+}
+@media (-moz-platform: macos){
+  :root:is([tabsintitlebar],[sizemode="fullscreen"]) {
+    --uc-window-control-width: 72px;
+  }
+}
+
+.titlebar-buttonbox, #window-controls{ color: var(--toolbar-color) }
+:root[sizemode="fullscreen"] .titlebar-buttonbox-container{ display: none }
+:root[sizemode="fullscreen"] #navigator-toolbox { position: relative; }
+
+:root[sizemode="fullscreen"] #TabsToolbar > .titlebar-buttonbox-container:last-child,
+:root[sizemode="fullscreen"] #window-controls{
+  position: absolute;
+  display: flex;
+  top: 0;
+  right:0;
+  height: 40px;
+}
+
+:root[sizemode="fullscreen"] #TabsToolbar > .titlebar-buttonbox-container:last-child,
+:root[uidensity="compact"][sizemode="fullscreen"] #window-controls{ height: 32px }
+
+#nav-bar{
+  border-inline: var(--uc-window-drag-space-pre,0px) solid transparent;
+  border-inline-style: solid !important;
+  border-right-width: calc(var(--uc-window-control-width,0px) + var(--uc-window-drag-space-post,0px));
+  background-clip: border-box !important;
+}
+
+/* Rules for window controls on left layout */
+@media (-moz-gtk-csd-reversed-placement),
+       (-moz-platform: macos){
+  :root[tabsintitlebar="true"] #nav-bar{
+    border-inline-width: calc(var(--uc-window-control-width,0px) + var(--uc-window-drag-space-post,0px)) var(--uc-window-drag-space-pre,0px)
+  }
+  :root[sizemode="fullscreen"] #TabsToolbar > .titlebar-buttonbox-container:last-child,
+  :root[sizemode="fullscreen"] #window-controls{ right: unset }
+}
+
+/* This pref can be used to force window controls on left even if that is not normal behavior on your OS */
+@supports -moz-bool-pref("userchrome.force-window-controls-on-left.enabled"){
+  :root[tabsintitlebar="true"] #nav-bar{
+    border-inline-width: calc(var(--uc-window-control-width,0px) + var(--uc-window-drag-space-post,0px)) var(--uc-window-drag-space-pre,0px)
+  }
+  :root[sizemode="fullscreen"] #TabsToolbar > .titlebar-buttonbox-container:last-child,
+  :root[sizemode="fullscreen"] #window-controls{ right: unset; }
+  .titlebar-buttonbox-container{
+    -moz-box-ordinal-group: 0 !important; /* Fx <112 compatibility */
+    order: -1 !important;
+  }
+  .titlebar-buttonbox{
+    -moz-box-direction: reverse; /* Fx <112 compatibility */
+    flex-direction: row-reverse;
+  }
+}
+
+/* Source file https://github.com/MrOtherGuy/firefox-csshacks/tree/master/chrome/tabs_on_bottom.css made available under Mozilla Public License v. 2.0
+See the above repository for updates as well as full license text. */
+
+/* IMPORTANT
+Get window_control_placeholder_support.css
+Window controls will be all wrong without it.
+Additionally on Linux, you may need to get:
+linux_gtk_window_control_patch.css
+
+Use tabs_on_bottom_menubar_on_top_patch.css if you
+have menubar permanently enabled and want it on top 
+*/
+
+#toolbar-menubar[autohide="true"] > .titlebar-buttonbox-container,
+#TabsToolbar > .titlebar-buttonbox-container{
+  position: fixed;
+  display: block;
+  top: 0px;
+  right:0;
+  height: 40px;
+}
+@media (-moz-gtk-csd-reversed-placement),
+       (-moz-platform: macos){
+  .titlebar-buttonbox-container{ left:0; right: unset !important; }
+}
+@supports -moz-bool-pref("userchrome.force-window-controls-on-left.enabled"){
+  .titlebar-buttonbox-container{ left:0; right: unset !important; }
+}
+
+:root[uidensity="compact"] #TabsToolbar > .titlebar-buttonbox-container{ height: 32px }
+
+#toolbar-menubar[inactive] > .titlebar-buttonbox-container{ opacity: 0 }
+
+.titlebar-buttonbox-container > .titlebar-buttonbox{ height: 100%; }
+
+#titlebar{
+  -moz-box-ordinal-group: 2; /* Fx <112 compatibility */
+  order: 2;
+  -moz-appearance: none !important;
+  --tabs-navbar-shadow-size: 0px;
+  --uc-menubar-vertical-overlap: 19px; /* for hide_tabs_with_one_tab_w_window_controls.css compatibility */
+}
+/* Re-order window and tab notification boxes */
+#navigator-toolbox > div{ display: contents }
+.global-notificationbox,
+#tab-notification-deck{
+  -moz-box-ordinal-group: 2; /* Fx <112 compatibility */
+  order: 2;
+}
+
+#TabsToolbar .titlebar-spacer{ display: none; }
+/* Also hide the toolbox bottom border which isn't at bottom with this setup */
+#navigator-toolbox::after{ display: none !important; }
+
+@media (-moz-gtk-csd-close-button){
+  .titlebar-button{
+    -moz-box-orient: vertical; /* Fx <112 compatibility */
+    flex-direction: column;
+  }
+}
+
+/* At Activated Menubar */
+:root:not([chromehidden~="menubar"], [sizemode="fullscreen"]) #toolbar-menubar:not([autohide="true"]) + #TabsToolbar > .titlebar-buttonbox-container {
+  display: block !important;
+}
+#toolbar-menubar:not([autohide="true"]) > .titlebar-buttonbox-container {
+  visibility: hidden;
+}
+
+/* These exist only for compatibility with autohide-tabstoolbar.css */
+toolbox#navigator-toolbox > toolbar#nav-bar.browser-toolbar{ animation: none; }
+#navigator-toolbox:hover #TabsToolbar{ animation: slidein ease-out 48ms 1 }
+#TabsToolbar > .titlebar-buttonbox-container{ visibility: visible }
+#navigator-toolbox:not(:-moz-lwtheme){ background-color: -moz-dialog }
+
+/* Uncomment the following if you want bookmarks toolbar to be below tabs */
+/*
+#PersonalToolbar{
+  -moz-box-ordinal-group: 2;
+  order: 2;
+}
+*/
+
+/* Source file https://github.com/MrOtherGuy/firefox-csshacks/tree/master/chrome/tabs_on_bottom_menubar_on_top_patch.css made available under Mozilla Public License v. 2.0
+See the above repository for updates as well as full license text. */
+
+/* Menubar on top patch - use with tabs_on_bottom.css */
+/* Only really useful if menubar is ALWAYS visible */
+
+:root:not([sizemode="fullscreen"]){ --uc-window-control-width: 0px !important }
+
+:root{
+   /* height if native titlebar is enabled, assumes empty menubar */
+  --uc-menubar-height: 20px;
+}
+:root[tabsintitlebar]{
+  /* height when native titlebar is disabled, more roomy so can fit buttons etc. */
+  --uc-menubar-height: 29px;
+}
+:root:is([sizemode="fullscreen"],[chromehidden~="menubar"]){
+  --uc-menubar-height: 0px;
+}
+/* Since menubar is statically at top, remove fake drag-space that might be set by window_control_placeholder_support.css */
+:root:not([sizemode="fullscreen"]) #nav-bar{ border-inline-width: 0 }
+
+#navigator-toolbox{
+  -moz-window-dragging: drag;
+  padding-top: var(--uc-menubar-height) !important;
+}
+
+/* Remove window dragging from notification boxes */
+#tab-notification-deck,
+.global-notificationbox{
+  -moz-window-dragging: no-drag;
+}
+
+#toolbar-menubar{
+  position: fixed;
+  display: flex;
+  top: 0px;
+  height: var(--uc-menubar-height);
+  width: 100%;
+  overflow: hidden;
+}
+
+#toolbar-menubar > .titlebar-buttonbox-container{ height: 100%; order: 100; }
+
+#toolbar-menubar > [flex]{ flex-grow: 100; }
+#toolbar-menubar > spacer[flex]{
+  order: 99;
+  flex-grow: 1;
+  min-width: var(--uc-window-drag-space-post,20px);
+}
+
+#toolbar-menubar .toolbarbutton-1 { --toolbarbutton-inner-padding: 3px }
+
+:root:not([sizemode="fullscreen"]) #toolbar-menubar.browser-toolbar > .titlebar-buttonbox-container{
+  visibility: visible;
+}
+:root:not([chromehidden~="menubar"], [sizemode="fullscreen"]) #TabsToolbar#TabsToolbar#TabsToolbar > .titlebar-buttonbox-container {
+  display: none !important;
+}
+
+
+
+
+/* Tabbar Customization */
+
+#navigator-toolbox:not(:-moz-lwtheme), #nav-bar, #PersonalToolbar{ 
+  background-color: var(--element-bg);
+}
+
+#TabsToolbar{
+  background-image: linear-gradient(to bottom, #cacac4, #cfcfc8, #d3d3cd, #d8d8d1, #ddddd6);
+}
+
+.tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-background{
+  background-image: linear-gradient(to bottom, #e1e1dd, #dfdfdb, #ddded9, #dcdcd7, #dadad5, #dadad5, #dbdbd5, #dbdbd5, #ddddd7, #e0e0da, #e2e2dc, #e5e5df);
+}
+
+.tabbrowser-tab[selected="true"] > .tab-stack > .tab-background{
+  background-image: linear-gradient(to bottom, #f7f7f5, #f3f3f1, #f0f0ed, #ecece9, #e9e9e5, #e8e8e4, #e8e8e3, #e7e7e2, #e9e9e3, #eaebe5, #ecece6, #eeeee8);
+}
+
+:root[uidensity="touch"] .toolbar-items, .tabbrowser-tab{
+  max-height: 35px;
+  min-height: 30px;
+  padding: 0 !important;
+  top: 1px;
+  position: relative;
+}
+
+.tabbrowser-tab[fadein]:not([style^="max-width"],[pinned]){
+  max-width: 300px !important;
+  min-width: 40px !important;
+}
+
+#urlbar-container::before {
+  content: ' ';
+  width: 1728px;
+  height: 1px;
+  position: relative;
+  top: 19px;
+  left: -119px;
+  background: #b0b09a;
+  border-bottom: black 1px solid;
+}
+
+#PlacesToolbarItems::after{
+  content: ' ';
+  width: 2000px;
+  height: 1px;
+  position: absolute;
+  top: 26px;
+  left: -182px;
+  background: #b0b09a;
+  border-bottom: black 1px solid;
+}
+
+#PlacesChevron{
+  display: none;
+}
+
+#PersonalToolbar{
+  padding: 0 !important;
+}
+
+#toolbar-menubar{
+  height: 35px;
+}
+
+body {
+  font-family: VT323 !important;
+}
+.titlebar-buttonbox-container::after{
+  content: 'Firefox';
+  font-size: 18px;
+  font-family: VT323 !important;;
+  color: white;
+  padding-left: 75px;
+  padding-top: 9px;
+  height: 26px;
+  width: 1728px;
+  left: -66px;
+  position: relative;
+  background: linear-gradient(to bottom, rgb(0, 90, 231), rgb(0, 90, 231) 12%, rgb(3, 114, 255));
+  box-shadow: inset 0 0 3px 2px #005ae7, inset 0 2px 2px 1px rgb(255 255 255 / 70%);
+  border-radius: 10px 10px 0 0;
+}
+
+.titlebar-buttonbox.titlebar-color{
+  bottom: 8px;
+}
+
+#nav-bar{
+  border-top: white 2px solid;
+  margin-top: 6px;
+}
+
+#nav-bar::before{
+  content: ' ';
+  width: 2px;
+  height: 38px;
+  position: absolute;
+  background: white;
+}
+
+#personal-bookmarks::before{
+  content: ' ';
+  width: 2px;
+  height: 38px;
+  position: absolute;
+  background: white;
+}
+
+toolbarbutton.bookmark-item:not(.subviewbutton){
+  border-radius: 0;
+}
+
+#urlbar {
+  z-index: 100;
+}
+
+.bookmark-item:not(:last-child)::after{
+  content: ' ';
+  width: 1px;
+  height: 15px;
+  background: #b0b09a;
+  border-right: white 1px solid;
+  margin-left: 15px;
+}
+
+#urlbar-background{
+  background-clip: none !important;
+  border-radius: 0 !important;
+  border: #96969c 1px solid;
+  background: white;
+}
+
+#urlbar:not([breakout-extend="true"]){
+  height: 22px !important;
+  min-height: 22px;
+  top: 8px;
+}
+
+.toolbarbutton-text {
+  font-size: 14px;
+}
+
+#reload-button, #forward-button, #back-button{
+  transform: translate(0, -2px);
+}
+
